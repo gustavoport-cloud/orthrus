@@ -1,14 +1,12 @@
 name: Deploy (Forge)
 
 on:
-  workflow_dispatch:
-  push:
-    branches: [ main ]
+  release:
+    types: [ published ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     steps:
       - name: Trigger Forge Deployment
         env:
