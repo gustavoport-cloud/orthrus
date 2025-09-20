@@ -1,0 +1,11 @@
+framework:
+  rate_limiter:
+    login:
+      policy: 'sliding_window'
+      limit: 1000000
+      interval: '1 minute'
+    client_token:
+      policy: 'sliding_window'
+      limit: 1000000
+      interval: '1 minute'
+

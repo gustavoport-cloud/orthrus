@@ -1,0 +1,39 @@
+# Code Owners for Orthrus
+#
+# This file defines individuals or teams that are responsible
+# for code in this repository.
+#
+# More information: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global owner - requires review from Thavarshan for all changes
+* @Thavarshan
+
+# Core application code
+/src/ @Thavarshan
+
+# Tests require review to maintain quality
+/tests/ @Thavarshan
+
+# Configuration files require careful review
+/config/ @Thavarshan
+/.env* @Thavarshan
+/docker-compose*.yml @Thavarshan
+/Dockerfile* @Thavarshan
+
+# Security-related files require extra attention
+/src/Security/ @Thavarshan
+/src/Service/TokenService.php @Thavarshan
+/src/Service/RefreshTokenService.php @Thavarshan
+
+# Database and migrations
+/migrations/ @Thavarshan
+/src/Entity/ @Thavarshan
+/src/Repository/ @Thavarshan
+
+# Documentation and project configuration
+/README.md @Thavarshan
+/CONTRIBUTING.md @Thavarshan
+/SECURITY.md @Thavarshan
+/composer.json @Thavarshan
+/phpstan.neon @Thavarshan
+/.php-cs-fixer.dist.php @Thavarshan

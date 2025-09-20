@@ -1,0 +1,30 @@
+security:
+
+  password_hashers:
+    App\Entity\User:
+      algorithm: auto
+      migrate_from: ['bcrypt']
+    App\Entity\OAuthClient:
+      algorithm: auto
+
+  providers:
+    # We use stateless API; authenticator builds user from token
+    app_users: { memory: ~ }
+
+  firewalls:
+    dev:
+      pattern: ^/(?:_(profiler|wdt)|_error)
+      security: false
+    main:
+      stateless: true
+      provider: app_users
+      custom_authenticators:
+        - App\Security\JwtAuthenticator
+
+  access_control:
+    - { path: ^/\.well-known/jwks\.json$, roles: PUBLIC_ACCESS }
+    - { path: ^/login$, roles: PUBLIC_ACCESS }
+    - { path: ^/token$, roles: PUBLIC_ACCESS }
+    - { path: ^/token/refresh$, roles: PUBLIC_ACCESS }
+    - { path: ^/logout$, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/me$, roles: IS_AUTHENTICATED_FULLY }

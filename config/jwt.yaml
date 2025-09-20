@@ -1,0 +1,13 @@
+parameters:
+  jwt:
+    issuer: '%env(default:default_issuer:APP_URL)%'
+    audience: 'symfony-token-service'
+    access_ttl: 600
+    skew: 60
+    keys:
+      current:
+        kid: '%env(JWT_KID)%'
+        private_path: '%kernel.project_dir%/var/keys/private.pem'
+        public_path: '%kernel.project_dir%/var/keys/public.pem'
+      previous: []
+  default_issuer: 'http://localhost:8000'

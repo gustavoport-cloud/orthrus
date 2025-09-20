@@ -1,0 +1,752 @@
+openapi: 3.0.3
+info:
+  title: Orthrus
+  description: |
+    A production-ready, multi-tenant JWT authentication service built with Symfony 7.3 and PHP 8.2+.
+
+    This API provides secure RS256 JWT access tokens, refresh token rotation with reuse detection,
+    OAuth 2.0 client credentials flow, and scope-based authorization.
+
+    ## Features
+    - Multi-tenant architecture with complete organization isolation
+    - JWT access tokens with RS256 signature and 10-minute TTL (configurable)
+    - Refresh token rotation with automatic reuse detection
+    - OAuth 2.0 client credentials flow for machine-to-machine authentication
+    - Scope-based authorization with fine-grained access control
+    - Rate limiting on authentication endpoints
+    - JWKS endpoint for public key discovery
+
+    ## Authentication
+    This API uses JWT Bearer tokens for authentication. Include the token in the Authorization header:
+    ```
+    Authorization: Bearer <your-jwt-token>
+    ```
+
+    ## Multi-tenancy
+    All protected endpoints require the `X-Org-Id` header to specify the organization context:
+    ```
+    X-Org-Id: <organization-uuid>
+    ```
+  version: 1.0.0
+  contact:
+    name: Thavarshan
+    email: thavarshan@gmail.com
+  license:
+    name: Proprietary
+
+servers:
+  - url: http://localhost:8000
+    description: Development server
+  - url: https://api.example.com
+    description: Production server
+
+security:
+  - BearerAuth: []
+  - BearerAuthWithOrg: []
+
+paths:
+  /login:
+    post:
+      tags:
+        - Authentication
+      summary: User authentication
+      description: |
+        Authenticate a user with email and password to receive access and refresh tokens.
+
+        This endpoint supports multi-tenant authentication by requiring an organization ID.
+        The user must be a member of the specified organization to authenticate successfully.
+      operationId: login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            examples:
+              basic_login:
+                summary: Basic user login
+                value:
+                  email: user@example.com
+                  password: password123
+                  org: 550e8400-e29b-41d4-a716-446655440000
+                  scope:
+                    - profile.read
+                    - data.write
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+              examples:
+                success_response:
+                  summary: Successful authentication
+                  value:
+                    access_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImN1cnJlbnQta2V5LXV1aWQifQ...
+                    expires_in: 600
+                    refresh_token: 550e8400-e29b-41d4-a716-446655440000.dGhpc19pc19hX3NlY3JldF90b2tlbg
+                    token_type: Bearer
+        '400':
+          description: Bad request - Invalid request body or validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                validation_error:
+                  summary: Validation error
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+                    detail: Invalid request body
+        '401':
+          description: Unauthorized - Invalid credentials or user not in organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalid_credentials:
+                  summary: Invalid credentials
+                  value:
+                    type: about:blank
+                    title: Unauthorized
+                    status: 401
+                    detail: Invalid credentials
+                user_not_in_org:
+                  summary: User not in organization
+                  value:
+                    type: about:blank
+                    title: Unauthorized
+                    status: 401
+                    detail: User not in organization
+        '429':
+          description: Too many requests - Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                rate_limit:
+                  summary: Rate limit exceeded
+                  value:
+                    type: about:blank
+                    title: Too Many Requests
+                    status: 429
+                    detail: Rate limit exceeded
+
+  /token/refresh:
+    post:
+      tags:
+        - Authentication
+      summary: Refresh access token
+      description: |
+        Refresh an expired access token using a refresh token.
+
+        This endpoint implements automatic refresh token rotation for enhanced security.
+        The old refresh token is invalidated and a new one is issued with each request.
+      operationId: refreshToken
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshRequest'
+            examples:
+              refresh_token:
+                summary: Refresh token request
+                value:
+                  refresh_token: 550e8400-e29b-41d4-a716-446655440000.dGhpc19pc19hX3NlY3JldF90b2tlbg
+                  org: 550e8400-e29b-41d4-a716-446655440000
+      responses:
+        '200':
+          description: Token refreshed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+              examples:
+                refresh_success:
+                  summary: Successful token refresh
+                  value:
+                    access_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImN1cnJlbnQta2V5LXV1aWQifQ...
+                    expires_in: 600
+                    refresh_token: 660f9511-f3ac-52e5-b827-557766551111.bmV3X3NlY3JldF90b2tlbl9oZXJl
+                    token_type: Bearer
+        '400':
+          description: Bad request - Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - Invalid or expired refresh token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalid_refresh_token:
+                  summary: Invalid refresh token
+                  value:
+                    type: about:blank
+                    title: Unauthorized
+                    status: 401
+                    detail: Invalid refresh token
+
+  /logout:
+    post:
+      tags:
+        - Authentication
+      summary: Logout and revoke refresh token
+      description: |
+        Revoke a refresh token to log out the user.
+
+        This endpoint invalidates the specified refresh token, preventing it from being used
+        for future token refreshes.
+      operationId: logout
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+            examples:
+              logout_request:
+                summary: Logout request
+                value:
+                  refresh_token: 550e8400-e29b-41d4-a716-446655440000.dGhpc19pc19hX3NlY3JldF90b2tlbg
+      responses:
+        '204':
+          description: Logout successful - refresh token revoked
+
+  /token:
+    post:
+      tags:
+        - OAuth 2.0
+      summary: OAuth 2.0 client credentials flow
+      description: |
+        Authenticate using OAuth 2.0 client credentials flow for machine-to-machine authentication.
+
+        This endpoint supports two authentication methods:
+        1. HTTP Basic Authentication (client_id:client_secret in Authorization header)
+        2. JSON body parameters (client_id and client_secret in request body)
+
+        The client must be authorized for the specified organization and requested scopes.
+      operationId: clientCredentials
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientCredentialsRequest'
+            examples:
+              json_auth:
+                summary: JSON body authentication
+                value:
+                  client_id: demo-client
+                  client_secret: demo-secret
+                  org: 550e8400-e29b-41d4-a716-446655440000
+                  scope:
+                    - api.read
+                    - api.write
+              basic_auth:
+                summary: Basic auth (omit client_id/client_secret from body)
+                value:
+                  org: 550e8400-e29b-41d4-a716-446655440000
+                  scope:
+                    - api.read
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientTokenResponse'
+              examples:
+                client_success:
+                  summary: Successful client authentication
+                  value:
+                    access_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImN1cnJlbnQta2V5LXV1aWQifQ...
+                    expires_in: 600
+                    token_type: Bearer
+        '400':
+          description: Bad request - Missing organization or invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                missing_org:
+                  summary: Missing organization
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+                    detail: Missing org
+                unknown_org:
+                  summary: Unknown organization
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+                    detail: Unknown org
+        '401':
+          description: Unauthorized - Invalid client credentials or unauthorized scope/organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalid_client:
+                  summary: Invalid client credentials
+                  value:
+                    type: about:blank
+                    title: Unauthorized
+                    status: 401
+                    detail: Invalid client
+                org_not_allowed:
+                  summary: Organization not allowed
+                  value:
+                    type: about:blank
+                    title: Unauthorized
+                    status: 401
+                    detail: Org not allowed
+                scope_not_allowed:
+                  summary: Scope not allowed
+                  value:
+                    type: about:blank
+                    title: Unauthorized
+                    status: 401
+                    detail: Scope not allowed
+        '429':
+          description: Too many requests - Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /me:
+    get:
+      tags:
+        - User Information
+      summary: Get current user/client information
+      description: |
+        Retrieve information about the currently authenticated user or client.
+
+        This endpoint requires a valid access token, scope `profile.read`, and the X-Org-Id header matching
+        the organization claim in the JWT token.
+      operationId: getCurrentUser
+      security:
+        - BearerAuthWithOrg: []
+      parameters:
+        - name: X-Org-Id
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Organization UUID that must match the token's org claim
+          example: 550e8400-e29b-41d4-a716-446655440000
+      responses:
+        '200':
+          description: User information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfoResponse'
+              examples:
+                user_info:
+                  summary: User information
+                  value:
+                    sub: user:550e8400-e29b-41d4-a716-446655440000
+                    org: 550e8400-e29b-41d4-a716-446655440000
+                    scopes:
+                      - profile.read
+                    client: false
+                client_info:
+                  summary: Client information
+                  value:
+                    sub: client:660f9511-f3ac-52e5-b827-557766551111
+                    org: 550e8400-e29b-41d4-a716-446655440000
+                    scopes:
+                      - api.read
+                      - api.write
+                    client: true
+        '401':
+          description: Unauthorized - Invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - Missing or mismatched organization header, or required scope not granted (profile.read)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                org_mismatch:
+                  summary: Org mismatch or missing X-Org-Id
+                  value:
+                    type: about:blank
+                    title: Forbidden
+                    status: 403
+                    detail: Org mismatch or missing X-Org-Id
+
+  /.well-known/jwks.json:
+    get:
+      tags:
+        - Discovery
+      summary: JSON Web Key Set (JWKS)
+      description: |
+        Retrieve the JSON Web Key Set (JWKS) for verifying JWT token signatures.
+
+        This endpoint provides the public keys used to verify the RS256 signatures
+        of JWT access tokens issued by this service.
+      operationId: getJwks
+      security: []
+      responses:
+        '200':
+          description: JWKS retrieved successfully
+          headers:
+            Cache-Control:
+              description: Cache control header
+              schema:
+                type: string
+                example: public, max-age=300
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwksResponse'
+              examples:
+                jwks:
+                  summary: JWKS response
+                  value:
+                    keys:
+                      - kty: RSA
+                        use: sig
+                        kid: current-key-uuid
+                        n: base64-encoded-modulus-value-here
+                        e: AQAB
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT access token for API authentication
+
+    BearerAuthWithOrg:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT access token with required X-Org-Id header
+
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Authentication for OAuth client credentials
+
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+        - org
+      properties:
+        email:
+          type: string
+          format: email
+          description: User's email address
+          example: user@example.com
+        password:
+          type: string
+          format: password
+          description: User's password
+          example: password123
+        org:
+          type: string
+          format: uuid
+          maxLength: 36
+          description: Organization UUID
+          example: 550e8400-e29b-41d4-a716-446655440000
+        scope:
+          type: array
+          items:
+            type: string
+          description: Requested OAuth scopes
+          example:
+            - profile.read
+            - data.write
+
+    RefreshRequest:
+      type: object
+      required:
+        - refresh_token
+        - org
+      properties:
+        refresh_token:
+          type: string
+          description: Refresh token in format "uuid.secret"
+          example: 550e8400-e29b-41d4-a716-446655440000.dGhpc19pc19hX3NlY3JldF90b2tlbg
+        org:
+          type: string
+          format: uuid
+          description: Organization UUID
+          example: 550e8400-e29b-41d4-a716-446655440000
+
+    LogoutRequest:
+      type: object
+      properties:
+        refresh_token:
+          type: string
+          description: Refresh token to revoke
+          example: 550e8400-e29b-41d4-a716-446655440000.dGhpc19pc19hX3NlY3JldF90b2tlbg
+
+    ClientCredentialsRequest:
+      type: object
+      required:
+        - org
+      properties:
+        client_id:
+          type: string
+          description: OAuth client ID (optional if using Basic auth)
+          example: demo-client
+        client_secret:
+          type: string
+          format: password
+          description: OAuth client secret (optional if using Basic auth)
+          example: demo-secret
+        org:
+          type: string
+          format: uuid
+          description: Organization UUID
+          example: 550e8400-e29b-41d4-a716-446655440000
+        scope:
+          type: array
+          items:
+            type: string
+          description: Requested OAuth scopes
+          example:
+            - api.read
+            - api.write
+
+    TokenResponse:
+      type: object
+      required:
+        - access_token
+        - expires_in
+        - refresh_token
+        - token_type
+      properties:
+        access_token:
+          type: string
+          description: JWT access token
+          example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImN1cnJlbnQta2V5LXV1aWQifQ...
+        expires_in:
+          type: integer
+          description: Token expiration time in seconds
+          example: 600
+        refresh_token:
+          type: string
+          description: Opaque refresh token
+          example: 550e8400-e29b-41d4-a716-446655440000.dGhpc19pc19hX3NlY3JldF90b2tlbg
+        token_type:
+          type: string
+          enum:
+            - Bearer
+          description: Token type
+          example: Bearer
+
+    ClientTokenResponse:
+      type: object
+      required:
+        - access_token
+        - expires_in
+        - token_type
+      properties:
+        access_token:
+          type: string
+          description: JWT access token
+          example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImN1cnJlbnQta2V5LXV1aWQifQ...
+        expires_in:
+          type: integer
+          description: Token expiration time in seconds
+          example: 600
+        token_type:
+          type: string
+          enum:
+            - Bearer
+          description: Token type
+          example: Bearer
+
+    UserInfoResponse:
+      type: object
+      required:
+        - sub
+        - org
+        - scopes
+        - client
+      properties:
+        sub:
+          type: string
+          description: Subject identifier (user:uuid or client:uuid)
+          example: user:550e8400-e29b-41d4-a716-446655440000
+        org:
+          type: string
+          format: uuid
+          description: Organization UUID
+          example: 550e8400-e29b-41d4-a716-446655440000
+        scopes:
+          type: array
+          items:
+            type: string
+          description: Granted scopes
+          example:
+            - profile.read
+        client:
+          type: boolean
+          description: Whether the subject is a client (true) or user (false)
+          example: false
+
+    JwksResponse:
+      type: object
+      required:
+        - keys
+      properties:
+        keys:
+          type: array
+          items:
+            $ref: '#/components/schemas/JsonWebKey'
+          description: Array of JSON Web Keys
+
+    JsonWebKey:
+      type: object
+      required:
+        - kty
+        - use
+        - kid
+        - n
+        - e
+      properties:
+        kty:
+          type: string
+          enum:
+            - RSA
+          description: Key type
+          example: RSA
+        use:
+          type: string
+          enum:
+            - sig
+          description: Key usage
+          example: sig
+        kid:
+          type: string
+          description: Key ID
+          example: current-key-uuid
+        n:
+          type: string
+          description: RSA modulus (base64url-encoded)
+          example: base64-encoded-modulus-value-here
+        e:
+          type: string
+          description: RSA exponent (base64url-encoded)
+          example: AQAB
+
+    ErrorResponse:
+      type: object
+      required:
+        - type
+        - title
+        - status
+        - detail
+      properties:
+        type:
+          type: string
+          description: Error type URI
+          example: about:blank
+        title:
+          type: string
+          description: Error title
+          example: Bad Request
+        status:
+          type: integer
+          description: HTTP status code
+          example: 400
+        detail:
+          type: string
+          description: Error detail message
+          example: Invalid request body
+
+    JwtClaims:
+      type: object
+      description: JWT token claims structure
+      required:
+        - iss
+        - aud
+        - sub
+        - iat
+        - nbf
+        - exp
+        - jti
+        - org
+        - scope
+      properties:
+        iss:
+          type: string
+          description: Token issuer (configurable, defaults to APP_URL)
+          example: http://localhost:8000
+        aud:
+          type: string
+          description: Token audience (configurable)
+          example: symfony-token-service
+        sub:
+          type: string
+          description: Subject (user:uuid or client:uuid)
+          example: user:550e8400-e29b-41d4-a716-446655440000
+        iat:
+          type: integer
+          description: Issued at timestamp
+          example: 1234567890
+        nbf:
+          type: integer
+          description: Not before timestamp
+          example: 1234567890
+        exp:
+          type: integer
+          description: Expiration timestamp
+          example: 1234568790
+        jti:
+          type: string
+          format: uuid
+          description: JWT ID (unique token identifier)
+          example: 770fa020-f4bd-53f6-c938-668877662222
+        org:
+          type: string
+          format: uuid
+          description: Organization UUID
+          example: 550e8400-e29b-41d4-a716-446655440000
+        scope:
+          type: string
+          description: Space-separated list of scopes
+          example: profile.read data.write
+
+tags:
+  - name: Authentication
+    description: User and refresh token authentication endpoints
+  - name: OAuth 2.0
+    description: OAuth 2.0 client credentials flow
+  - name: User Information
+    description: Endpoints for retrieving user/client information
+  - name: Discovery
+    description: Public endpoints for service discovery

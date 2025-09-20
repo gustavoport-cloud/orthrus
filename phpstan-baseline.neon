@@ -1,0 +1,361 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Parameter \#1 \$client of method App\\Service\\TokenService\:\:createAccessTokenForClient\(\) expects App\\Entity\\OAuthClient, App\\Entity\\OAuthClient\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/AuthController.php
+
+		-
+			message: '#^Parameter \#1 \$haystack of function str_starts_with expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/AuthController.php
+
+		-
+			message: '#^Parameter \#1 \$string of function substr expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/AuthController.php
+
+		-
+			message: '#^Parameter \#2 \$org of method App\\Repository\\MembershipRepository\:\:isMember\(\) expects App\\Entity\\Organization, object given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/AuthController.php
+
+		-
+			message: '#^Parameter \#2 \$org of method App\\Service\\RefreshTokenService\:\:issue\(\) expects App\\Entity\\Organization, object given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/AuthController.php
+
+		-
+			message: '#^Parameter \#2 \$org of method App\\Service\\TokenService\:\:createAccessTokenForClient\(\) expects App\\Entity\\Organization, object given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/AuthController.php
+
+		-
+			message: '#^Parameter \#2 \$org of method App\\Service\\TokenService\:\:createAccessTokenForUser\(\) expects App\\Entity\\Organization, object given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/AuthController.php
+
+		-
+			message: '#^Method App\\Entity\\OAuthClient\:\:getAllowedOrgs\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/OAuthClient.php
+
+		-
+			message: '#^Method App\\Entity\\OAuthClient\:\:getAllowedScopes\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/OAuthClient.php
+
+		-
+			message: '#^Method App\\Entity\\OAuthClient\:\:setAllowedOrgs\(\) has parameter \$orgs with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/OAuthClient.php
+
+		-
+			message: '#^Method App\\Entity\\OAuthClient\:\:setAllowedScopes\(\) has parameter \$scopes with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/OAuthClient.php
+
+		-
+			message: '#^Property App\\Entity\\OAuthClient\:\:\$allowedOrgs type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/OAuthClient.php
+
+		-
+			message: '#^Property App\\Entity\\OAuthClient\:\:\$allowedScopes type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/OAuthClient.php
+
+		-
+			message: '#^Property App\\Entity\\OAuthClient\:\:\$createdAt is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Entity/OAuthClient.php
+
+		-
+			message: '#^Property App\\Entity\\OAuthClient\:\:\$lastUsedAt is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Entity/OAuthClient.php
+
+		-
+			message: '#^Property App\\Entity\\OAuthClient\:\:\$rotatedAt \(DateTimeImmutable\|null\) is never assigned DateTimeImmutable so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/OAuthClient.php
+
+		-
+			message: '#^Property App\\Entity\\OAuthClient\:\:\$rotatedAt is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Entity/OAuthClient.php
+
+		-
+			message: '#^Property App\\Entity\\RefreshToken\:\:\$createdAt is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Entity/RefreshToken.php
+
+		-
+			message: '#^Class App\\Repository\\MembershipRepository extends generic class Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Repository/MembershipRepository.php
+
+		-
+			message: '#^Class App\\Repository\\OAuthClientRepository extends generic class Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Repository/OAuthClientRepository.php
+
+		-
+			message: '#^Class App\\Repository\\OrganizationRepository extends generic class Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Repository/OrganizationRepository.php
+
+		-
+			message: '#^Class App\\Repository\\RefreshTokenRepository extends generic class Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Repository/RefreshTokenRepository.php
+
+		-
+			message: '#^Method App\\Repository\\RefreshTokenRepository\:\:findByHash\(\) should return App\\Entity\\RefreshToken\|null but returns object\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Repository/RefreshTokenRepository.php
+
+		-
+			message: '#^Class App\\Repository\\RevokedJtiRepository extends generic class Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Repository/RevokedJtiRepository.php
+
+		-
+			message: '#^Class App\\Repository\\UserRepository extends generic class Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Repository/UserRepository.php
+
+		-
+			message: '#^Method App\\Security\\ApiUser\:\:getUserIdentifier\(\) should return non\-empty\-string but returns string\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Security/ApiUser.php
+
+		-
+			message: '#^Class App\\Security\\OrgVoter extends generic class Symfony\\Component\\Security\\Core\\Authorization\\Voter\\Voter but does not specify its types\: TAttribute, TSubject$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Security/OrgVoter.php
+
+		-
+			message: '#^Class App\\Security\\ScopeVoter extends generic class Symfony\\Component\\Security\\Core\\Authorization\\Voter\\Voter but does not specify its types\: TAttribute, TSubject$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Security/ScopeVoter.php
+
+		-
+			message: '#^Cannot access offset ''keys'' on array\|bool\|float\|int\|string\|UnitEnum\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Service/JwksService.php
+
+		-
+			message: '#^Cannot access offset ''keys'' on array\|bool\|float\|int\|string\|UnitEnum\|null\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Service/JwksService.php
+
+		-
+			message: '#^Method App\\Service\\JwksService\:\:buildJwk\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/JwksService.php
+
+		-
+			message: '#^Method App\\Service\\JwksService\:\:getJwks\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/JwksService.php
+
+		-
+			message: '#^Property App\\Service\\JwksService\:\:\$current type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/JwksService.php
+
+		-
+			message: '#^Property App\\Service\\JwksService\:\:\$previous type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/JwksService.php
+
+		-
+			message: '#^Call to an undefined method object\:\:getClient\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Service/RefreshTokenService.php
+
+		-
+			message: '#^Call to an undefined method object\:\:getExpiresAt\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Service/RefreshTokenService.php
+
+		-
+			message: '#^Call to an undefined method object\:\:getIp\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Service/RefreshTokenService.php
+
+		-
+			message: '#^Call to an undefined method object\:\:getOrg\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: src/Service/RefreshTokenService.php
+
+		-
+			message: '#^Call to an undefined method object\:\:getReplacedBy\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Service/RefreshTokenService.php
+
+		-
+			message: '#^Call to an undefined method object\:\:getTokenHash\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: src/Service/RefreshTokenService.php
+
+		-
+			message: '#^Call to an undefined method object\:\:getUser\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Service/RefreshTokenService.php
+
+		-
+			message: '#^Call to an undefined method object\:\:getUserAgent\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Service/RefreshTokenService.php
+
+		-
+			message: '#^Call to an undefined method object\:\:isRevoked\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Service/RefreshTokenService.php
+
+		-
+			message: '#^Call to an undefined method object\:\:revoke\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: src/Service/RefreshTokenService.php
+
+		-
+			message: '#^Call to an undefined method object\:\:setReplacedBy\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Service/RefreshTokenService.php
+
+		-
+			message: '#^Method App\\Service\\RefreshTokenService\:\:split\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/RefreshTokenService.php
+
+		-
+			message: '#^Parameter \#1 \$start of method App\\Service\\RefreshTokenService\:\:revokeChain\(\) expects App\\Entity\\RefreshToken, object given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/RefreshTokenService.php
+
+		-
+			message: '#^Cannot access offset ''access_ttl'' on array\|bool\|float\|int\|string\|UnitEnum\|null\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Service/TokenService.php
+
+		-
+			message: '#^Cannot access offset ''audience'' on array\|bool\|float\|int\|string\|UnitEnum\|null\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Service/TokenService.php
+
+		-
+			message: '#^Cannot access offset ''issuer'' on array\|bool\|float\|int\|string\|UnitEnum\|null\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Service/TokenService.php
+
+		-
+			message: '#^Cannot access offset ''keys'' on array\|bool\|float\|int\|string\|UnitEnum\|null\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 3
+			path: src/Service/TokenService.php
+
+		-
+			message: '#^Cannot access offset ''skew'' on array\|bool\|float\|int\|string\|UnitEnum\|null\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Service/TokenService.php
+
+		-
+			message: '#^Method App\\Service\\TokenService\:\:createAccessTokenForClient\(\) has parameter \$scopes with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/TokenService.php
+
+		-
+			message: '#^Method App\\Service\\TokenService\:\:createAccessTokenForUser\(\) has parameter \$scopes with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/TokenService.php
+
+		-
+			message: '#^Parameter \#1 \$audience of class Lcobucci\\JWT\\Validation\\Constraint\\PermittedFor constructor expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/TokenService.php
+
+		-
+			message: '#^Parameter \#1 \$contents of static method Lcobucci\\JWT\\Signer\\Key\\InMemory\:\:plainText\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 3
+			path: src/Service/TokenService.php
+
+		-
+			message: '#^Parameter \#1 \$issuer of method Lcobucci\\JWT\\Builder\:\:issuedBy\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Service/TokenService.php
+
+		-
+			message: '#^Parameter \#1 \$jwt of method Lcobucci\\JWT\\Parser\:\:parse\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/TokenService.php
+
+		-
+			message: '#^Parameter \#1 \.\.\.\$audiences of method Lcobucci\\JWT\\Builder\:\:permittedFor\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Service/TokenService.php
+
+		-
+			message: '#^Parameter \#1 \.\.\.\$issuers of class Lcobucci\\JWT\\Validation\\Constraint\\IssuedBy constructor expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/TokenService.php

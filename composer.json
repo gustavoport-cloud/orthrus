@@ -1,20 +1,60 @@
 {
+    "name": "thavarshan/orthrus",
+    "description": "A multi-tenant JWT authentication service",
+    "keywords": [
+        "jwt",
+        "authentication",
+        "oauth2",
+        "symfony",
+        "multi-tenant",
+        "refresh-token",
+        "api",
+        "security"
+    ],
     "type": "project",
-    "license": "proprietary",
+    "license": "MIT",
+    "homepage": "https://github.com/Thavarshan/orthrus",
+    "support": {
+        "issues": "https://github.com/Thavarshan/orthrus/issues",
+        "source": "https://github.com/Thavarshan/orthrus",
+        "docs": "https://github.com/Thavarshan/orthrus/blob/main/README.md"
+    },
+    "authors": [
+        {
+            "name": "Thavarshan",
+            "email": "thavarshan@gmail.com",
+            "role": "Developer"
+        }
+    ],
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-openssl": "*",
+        "doctrine/doctrine-bundle": "^2.16.2",
+        "doctrine/doctrine-migrations-bundle": "^3.4.2",
+        "doctrine/orm": "^2.20.6",
+        "lcobucci/jwt": "^5.5",
+        "ramsey/uuid": "^4.9.1",
         "symfony/console": "7.3.*",
         "symfony/dotenv": "7.3.*",
         "symfony/flex": "^2.8.2",
         "symfony/framework-bundle": "7.3.*",
+        "symfony/monolog-bundle": "^3.10",
+        "symfony/rate-limiter": "7.3.*",
         "symfony/runtime": "7.3.*",
+        "symfony/security-bundle": "7.3.*",
+        "symfony/validator": "7.3.*",
         "symfony/yaml": "7.3.*"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.19",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-doctrine": "^2.0",
+        "phpstan/phpstan-symfony": "^2.0",
+        "phpunit/phpunit": "^10.5.55"
     },
     "config": {
         "allow-plugins": {
@@ -55,6 +95,23 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "test": [
+            "php -d variables_order=EGPCS ./vendor/bin/phpunit"
+        ],
+        "lint": [
+            "./vendor/bin/php-cs-fixer fix --dry-run --diff"
+        ],
+        "lint-fix": [
+            "./vendor/bin/php-cs-fixer fix"
+        ],
+        "phpstan": [
+            "./vendor/bin/phpstan analyse"
+        ],
+        "check": [
+            "@lint",
+            "@phpstan",
+            "@test"
         ]
     },
     "conflict": {

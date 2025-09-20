@@ -1,0 +1,33 @@
+parameters:
+    level: 6
+    paths:
+        - src
+    treatPhpDocTypesAsCertain: false
+    reportUnmatchedIgnoredErrors: false
+
+    # Exclude patterns
+    excludePaths:
+        - src/Kernel.php
+        - var/*
+        - vendor/*
+
+    # Ignore specific errors that are acceptable
+    ignoreErrors:
+        -
+            message: '#^Property App\\Entity\\OAuthClient::\$lastUsedAt is never read, only written\.$#'
+            path: src/Entity/OAuthClient.php
+        -
+            message: '#^Property App\\Entity\\OAuthClient::\$rotatedAt .* is never read, only written\.$#'
+            path: src/Entity/OAuthClient.php
+        -
+            message: '#^Property App\\Entity\\OAuthClient::\$rotatedAt is never read, only written\.$#'
+            path: src/Entity/OAuthClient.php
+        -
+            message: '#^Property App\\Entity\\OAuthClient::\$rotatedAt \(DateTimeImmutable\|null\) is never assigned DateTimeImmutable so it can be removed from the property type\.$#'
+            path: src/Entity/OAuthClient.php
+        -
+            message: '#^Property App\\Entity\\OAuthClient::\$createdAt is never read, only written\.$#'
+            path: src/Entity/OAuthClient.php
+        -
+            message: '#^Property App\\Entity\\RefreshToken::\$createdAt is never read, only written\.$#'
+            path: src/Entity/RefreshToken.php

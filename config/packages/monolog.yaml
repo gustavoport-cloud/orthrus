@@ -1,0 +1,16 @@
+monolog:
+  channels: ['auth']
+  handlers:
+    main:
+      type: stream
+      path: '%kernel.logs_dir%/%kernel.environment%.log'
+      level: info
+    console:
+      type: console
+      process_psr_3_messages: false
+      channels: [ '!event', '!doctrine' ]
+    auth:
+      type: stream
+      path: '%kernel.logs_dir%/auth.log'
+      level: info
+

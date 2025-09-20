@@ -1,4 +1,5 @@
 
+# Symfony Framework
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
@@ -8,3 +9,51 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+
+# Testing
+###> phpunit/phpunit ###
+/phpunit.xml
+/.phpunit.cache/
+###< phpunit/phpunit ###
+
+# Code Quality Tools
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Security & Keys
+/var/keys/
+*.pem
+*.key
+
+# Logs
+*.log
+/logs/
+
+# Temporary Files
+/tmp/
+*.tmp
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# PHPStan
+/phpstan.cache
