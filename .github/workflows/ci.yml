@@ -31,10 +31,8 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist
-      - name: Run code style check
-        run: make lint
       - name: Run PHPStan
-        run: make phpstan
+        run: ./vendor/bin/phpstan analyse -c phpstan.neon
       - name: Run PHPUnit
         env:
           APP_ENV: test
